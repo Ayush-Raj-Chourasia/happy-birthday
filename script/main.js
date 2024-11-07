@@ -1,4 +1,5 @@
-// Import the data to customize and insert them into page
+// Import the data to customize and insert them into the page
+
 const fetchData = () => {
   fetch("customize.json")
     .then(data => data.json())
@@ -16,27 +17,36 @@ const fetchData = () => {
         }
 
         // Check if the iteration is over
-        // Run amimation if so
-        if ( dataArr.length === dataArr.indexOf(customData) + 1 ) {
+        // Run animation if so
+        if (dataArr.length === dataArr.indexOf(customData) + 1) {
+          // Play the audio automatically when the page is loaded
+          const audio = document.getElementById("birthdayAudio");
+          audio.play();
+
           animationTimeline();
-        } 
+        }
       });
     });
 };
 
+
+
 // Animation Timeline
 const animationTimeline = () => {
-  // Spit chars that needs to be animated individually
+  // Get the audio element (already playing automatically when page loads)
+  const audio = document.getElementById("birthdayAudio");
+
+  // Spit chars that need to be animated individually
   const textBoxChars = document.getElementsByClassName("hbd-chatbox")[0];
   const hbd = document.getElementsByClassName("wish-hbd")[0];
 
   textBoxChars.innerHTML = `<span>${textBoxChars.innerHTML
     .split("")
-    .join("</span><span>")}</span`;
+    .join("</span><span>")}</span>`;
 
   hbd.innerHTML = `<span>${hbd.innerHTML
     .split("")
-    .join("</span><span>")}</span`;
+    .join("</span><span>")}</span>`;
 
   const ideaTextTrans = {
     opacity: 0,
@@ -87,7 +97,6 @@ const animationTimeline = () => {
     .from(".three", 0.7, {
       opacity: 0,
       y: 10
-      // scale: 0.7
     })
     .to(
       ".three",
@@ -232,7 +241,6 @@ const animationTimeline = () => {
       {
         opacity: 0,
         y: -50,
-        // scale: 0.3,
         rotation: 150,
         skewX: "30deg",
         ease: Elastic.easeOut.config(1, 0.5)
@@ -292,14 +300,19 @@ const animationTimeline = () => {
       "+=1"
     );
 
-  // tl.seek("currentStep");
-  // tl.timeScale(20);
+  // tl.timeScale(10);
+
   // Restart Animation on click
   const replyBtn = document.getElementById("replay");
   replyBtn.addEventListener("click", () => {
     tl.restart();
+    audio.currentTime = 0; // Reset audio to start from the beginning
+    audio.play(); // Replay audio
   });
 };
 
+
+
 // Run fetch and animation in sequence
 fetchData();
+
